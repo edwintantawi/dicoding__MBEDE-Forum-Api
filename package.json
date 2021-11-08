@@ -1,0 +1,49 @@
+{
+  "name": "forum-api",
+  "version": "1.0.0",
+  "description": "Forum API",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "start:dev": "nodemon src/app.js",
+    "test": "jest --coverage --setupFile dotenv/config -i",
+    "test:watch": "jest --watchAll --coverage --setupFile dotenv/config -i",
+    "migrate": "node-pg-migrate",
+    "migrate:test": "node-pg-migrate -f config/database/test.json",
+    "lint": "eslint src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edwintantawi/dicoding__MBEDE-Forum-Api.git"
+  },
+  "keywords": [
+    "forum",
+    "forum-api"
+  ],
+  "author": "edwintantawi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edwintantawi/dicoding__MBEDE-Forum-Api/issues"
+  },
+  "homepage": "https://github.com/edwintantawi/dicoding__MBEDE-Forum-Api#readme",
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.3.1",
+    "node-pg-migrate": "^6.0.0",
+    "nodemon": "^2.0.14",
+    "prettier": "^2.4.1"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^20.2.1",
+    "@hapi/jwt": "^2.1.0",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
+    "nanoid": "^3.1.30",
+    "pg": "^8.7.1"
+  }
+}
