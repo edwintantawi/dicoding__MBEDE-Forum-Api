@@ -1,6 +1,6 @@
 // istanbul ignore file
 const { Pool } = require('pg');
-const { getEnv } = require('../../../../config/env');
+const { getEnv } = require('../../../Commons/helpers/getEnv');
 
 const testConfig = {
   host: getEnv('PGHOST_TEST'),

@@ -1,5 +1,5 @@
 const Hapi = require('@hapi/hapi');
-const { getEnv } = require('../../../config/env');
+const { getEnv } = require('../../Commons/helpers/getEnv');
 const { usersPlugin } = require('../../Interfaces/http/api/users');
 const { extensionsPlugin } = require('../../Interfaces/http/extensions');
 
