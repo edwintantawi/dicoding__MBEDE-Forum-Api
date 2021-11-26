@@ -1,4 +1,4 @@
-class NewAuth {
+class NewAuthentication {
   constructor(payload) {
     this._verifyPayload(payload);
     const { accessToken, refreshToken } = payload;
@@ -20,4 +20,4 @@ class NewAuth {
   }
 }
 
-module.exports = { NewAuth };
+module.exports = { NewAuthentication };

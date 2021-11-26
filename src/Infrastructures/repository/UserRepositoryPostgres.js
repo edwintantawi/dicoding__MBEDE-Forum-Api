@@ -11,15 +11,15 @@ class UserRepositoryPostgres extends UserRepository {
 
   async verifyAvailableUsername(username) {
     const query = {
-      text: `SELECT username
-              FROM users
-              WHERE username = $1`,
+      text: 'SELECT username FROM users WHERE username = $1',
       values: [username],
     };
 
-    const { rowCount } = await this._pool.query(query);
+    const result = await this._pool.query(query);
 
-    if (rowCount) throw new InvariantError('username is not available');
+    if (result.rowCount) {
+      throw new InvariantError('username not available');
+    }
   }
 
   async addUser(registerUser) {
@@ -27,15 +27,45 @@ class UserRepositoryPostgres extends UserRepository {
     const id = `user-${this._idGenerator()}`;
 
     const query = {
-      text: `INSERT INTO users
-              VALUES ($1, $2, $3, $4)
-              RETURNING id, username, fullname`,
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id, username, fullname',
       values: [id, username, password, fullname],
     };
 
-    const { rows } = await this._pool.query(query);
+    const result = await this._pool.query(query);
 
-    return new RegisteredUser({ ...rows[0] });
+    return new RegisteredUser({ ...result.rows[0] });
+  }
+
+  async getPasswordByUsername(username) {
+    const query = {
+      text: 'SELECT password FROM users WHERE username = $1',
+      values: [username],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new InvariantError('username not found');
+    }
+
+    return result.rows[0].password;
+  }
+
+  async getIdByUsername(username) {
+    const query = {
+      text: 'SELECT id FROM users WHERE username = $1',
+      values: [username],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new InvariantError('user not found');
+    }
+
+    const { id } = result.rows[0];
+
+    return id;
   }
 }
 
