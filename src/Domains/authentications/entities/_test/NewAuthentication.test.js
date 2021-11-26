@@ -1,12 +1,12 @@
-const { NewAuth } = require('../NewAuth');
+const { NewAuthentication } = require('../NewAuthentication');
 
-describe('NewAuth entities', () => {
+describe('NewAuthentication entities', () => {
   it('should throw error when payload not contain needed property', () => {
     const payload = {
       accessToken: 'accessToken',
     };
 
-    expect(() => new NewAuth(payload)).toThrowError(
+    expect(() => new NewAuthentication(payload)).toThrowError(
       'NEW_AUTH.NOT_CONTAIN_NEEDED_PROPERTY'
     );
   });
@@ -17,20 +17,20 @@ describe('NewAuth entities', () => {
       refreshToken: 'refreshToken',
     };
 
-    expect(() => new NewAuth(payload)).toThrowError(
+    expect(() => new NewAuthentication(payload)).toThrowError(
       'NEW_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
 
-  it('should create newAuth object correctly', () => {
+  it('should create NewAuthentication object correctly', () => {
     const payload = {
       accessToken: 'accessToken',
       refreshToken: 'refreshToken',
     };
 
-    const newAuth = new NewAuth(payload);
+    const newAuthentication = new NewAuthentication(payload);
 
-    expect(newAuth.accessToken).toEqual(payload.accessToken);
-    expect(newAuth.refreshToken).toEqual(payload.refreshToken);
+    expect(newAuthentication.accessToken).toEqual(payload.accessToken);
+    expect(newAuthentication.refreshToken).toEqual(payload.refreshToken);
   });
 });

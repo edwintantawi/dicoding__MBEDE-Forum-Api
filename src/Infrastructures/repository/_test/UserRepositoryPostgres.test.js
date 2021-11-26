@@ -1,4 +1,4 @@
-const { UsersTableTestHelper } = require('../../../../test/UsersTableTestHelper');
+const { UsersTableTestHelper } = require('../../../../tests/UsersTableTestHelper');
 const { InvariantError } = require('../../../Commons/exceptions/InvariantError');
 const { RegisterUser } = require('../../../Domains/users/entities/RegisterUser');
 const {
@@ -18,7 +18,7 @@ describe('UserRepositoryPostgres', () => {
 
   describe('verifyAvailableUsername method', () => {
     it('should throw InvariantError when username not available', async () => {
-      await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      await UsersTableTestHelper.addUser({ username: 'dicoding' }); // memasukan user baru dengan username dicoding
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
       await expect(
@@ -26,7 +26,7 @@ describe('UserRepositoryPostgres', () => {
       ).rejects.toThrowError(InvariantError);
     });
 
-    it('should not throw InvariantError when username is available', async () => {
+    it('should not throw InvariantError when username available', async () => {
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
       await expect(
@@ -36,14 +36,13 @@ describe('UserRepositoryPostgres', () => {
   });
 
   describe('addUser method', () => {
-    it('should presist register user', async () => {
+    it('should persist register user and return registered user correctly', async () => {
       const registerUser = new RegisterUser({
         username: 'dicoding',
         password: 'secret_password',
-        fullname: 'Dicoding Academy',
+        fullname: 'Dicoding Indonesia',
       });
-
-      const fakeIdGenerator = () => '123';
+      const fakeIdGenerator = () => '123'; // stub!
       const userRepositoryPostgres = new UserRepositoryPostgres(
         pool,
         fakeIdGenerator
@@ -59,10 +58,9 @@ describe('UserRepositoryPostgres', () => {
       const registerUser = new RegisterUser({
         username: 'dicoding',
         password: 'secret_password',
-        fullname: 'Dicoding Academy',
+        fullname: 'Dicoding Indonesia',
       });
-
-      const fakeIdGenerator = () => '123';
+      const fakeIdGenerator = () => '123'; // stub!
       const userRepositoryPostgres = new UserRepositoryPostgres(
         pool,
         fakeIdGenerator
@@ -73,10 +71,52 @@ describe('UserRepositoryPostgres', () => {
       expect(registeredUser).toStrictEqual(
         new RegisteredUser({
           id: 'user-123',
-          username: registerUser.username,
-          fullname: registerUser.fullname,
+          username: 'dicoding',
+          fullname: 'Dicoding Indonesia',
         })
       );
+    });
+  });
+
+  describe('getPasswordByUsername method', () => {
+    it('should throw InvariantError when user not found', () => {
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+
+      return expect(
+        userRepositoryPostgres.getPasswordByUsername('dicoding')
+      ).rejects.toThrowError(InvariantError);
+    });
+
+    it('should return username password when user is found', async () => {
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+      await UsersTableTestHelper.addUser({
+        username: 'dicoding',
+        password: 'secret_password',
+      });
+
+      const password = await userRepositoryPostgres.getPasswordByUsername(
+        'dicoding'
+      );
+      expect(password).toBe('secret_password');
+    });
+  });
+
+  describe('getIdByUsername method', () => {
+    it('should throw InvariantError when user not found', async () => {
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+
+      await expect(
+        userRepositoryPostgres.getIdByUsername('dicoding')
+      ).rejects.toThrowError(InvariantError);
+    });
+
+    it('should return user id correctly', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-321', username: 'dicoding' });
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+
+      const userId = await userRepositoryPostgres.getIdByUsername('dicoding');
+
+      expect(userId).toEqual('user-321');
     });
   });
 });
