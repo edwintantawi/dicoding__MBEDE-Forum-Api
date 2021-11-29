@@ -30,7 +30,7 @@ class AuthenticationRepositoryPostgres extends AuthenticationRepository {
     const result = await this._pool.query(query);
 
     if (result.rows.length === 0) {
-      throw new InvariantError('Refresh token not found');
+      throw new InvariantError('refresh token not found');
     }
   }
 
