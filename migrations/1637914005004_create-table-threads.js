@@ -18,7 +18,17 @@ exports.up = (pgm) => {
       type: 'TEXT',
       notNull: true,
     },
+    owner: {
+      type: 'VARCHAR(50)',
+      notNull: true,
+    },
   });
+
+  pgm.createConstraint(
+    TABLE_NAME,
+    'fk_threads.owner_users.id',
+    'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE'
+  );
 };
 
 exports.down = (pgm) => {
