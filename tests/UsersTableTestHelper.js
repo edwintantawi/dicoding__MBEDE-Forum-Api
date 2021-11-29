@@ -10,11 +10,13 @@ class UsersTableTestHelper {
   }) {
     const query = {
       text: `INSERT INTO users
-              VALUES ($1, $2, $3, $4)`,
+              VALUES ($1, $2, $3, $4)
+              RETURNING id`,
       values: [id, username, password, fullname],
     };
 
-    await pool.query(query);
+    const { rows } = await pool.query(query);
+    return rows[0].id;
   }
 
   static async findUserById(id) {
@@ -30,7 +32,7 @@ class UsersTableTestHelper {
   }
 
   static async cleanTable() {
-    await pool.query('TRUNCATE TABLE users');
+    await pool.query('TRUNCATE TABLE users, threads');
   }
 }
 

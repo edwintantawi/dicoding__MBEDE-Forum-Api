@@ -41,6 +41,12 @@ DomainErrorTranslator._directories = {
   'NEW_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
     'accessToken and refreshToken must a string'
   ),
+  'NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
+    "can't create a new thread because the required property doesn't exist"
+  ),
+  'NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
+    "can't create a new thread because the data type doesn't match"
+  ),
 };
 
 module.exports = { DomainErrorTranslator };

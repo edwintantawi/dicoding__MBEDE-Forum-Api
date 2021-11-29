@@ -31,6 +31,11 @@ const { LogoutUserUseCase } = require('../Applications/use_case/LogoutUserUseCas
 const {
   RefreshAuthenticationUseCase,
 } = require('../Applications/use_case/RefreshAuthenticationUseCase');
+const { ThreadRepository } = require('../Domains/threads/ThreadRepository');
+const {
+  ThreadRepositoryPostgres,
+} = require('./repository/ThreadRepositoryPostgres');
+const { AddThreadUseCase } = require('../Applications/use_case/AddThreadUseCase');
 
 // creating container
 const container = createContainer();
@@ -41,47 +46,35 @@ container.register([
     key: UserRepository.name,
     Class: UserRepositoryPostgres,
     parameter: {
-      dependencies: [
-        {
-          concrete: pool,
-        },
-        {
-          concrete: nanoid,
-        },
-      ],
+      dependencies: [{ concrete: pool }, { concrete: nanoid }],
     },
   },
   {
     key: AuthenticationRepository.name,
     Class: AuthenticationRepositoryPostgres,
     parameter: {
-      dependencies: [
-        {
-          concrete: pool,
-        },
-      ],
+      dependencies: [{ concrete: pool }],
+    },
+  },
+  {
+    key: ThreadRepository.name,
+    Class: ThreadRepositoryPostgres,
+    parameter: {
+      dependencies: [{ concrete: pool }, { concrete: nanoid }],
     },
   },
   {
     key: PasswordHash.name,
     Class: BcryptPasswordHash,
     parameter: {
-      dependencies: [
-        {
-          concrete: bcrypt,
-        },
-      ],
+      dependencies: [{ concrete: bcrypt }],
     },
   },
   {
     key: AuthenticationTokenManager.name,
     Class: JwtTokenManager,
     parameter: {
-      dependencies: [
-        {
-          concrete: Jwt.token,
-        },
-      ],
+      dependencies: [{ concrete: Jwt.token }],
     },
   },
 ]);
@@ -94,10 +87,7 @@ container.register([
     parameter: {
       injectType: 'destructuring',
       dependencies: [
-        {
-          name: 'userRepository',
-          internal: UserRepository.name,
-        },
+        { name: 'userRepository', internal: UserRepository.name },
         {
           name: 'passwordHash',
           internal: PasswordHash.name,
@@ -158,6 +148,14 @@ container.register([
           internal: AuthenticationTokenManager.name,
         },
       ],
+    },
+  },
+  {
+    key: AddThreadUseCase.name,
+    Class: AddThreadUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [{ name: 'threadRepository', internal: ThreadRepository.name }],
     },
   },
 ]);

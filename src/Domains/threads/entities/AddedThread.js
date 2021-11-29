@@ -1,23 +1,23 @@
-class NewThread {
+class AddedThread {
   constructor(payload) {
     this._verifyPayload(payload);
-    const { title, body, owner } = payload;
+    const { id, title, owner } = payload;
 
+    this.id = id;
     this.title = title;
-    this.body = body;
     this.owner = owner;
   }
 
   _verifyPayload(payload) {
-    const { title, body, owner } = payload;
+    const { id, title, owner } = payload;
 
-    if (!title || !body || !owner) {
+    if (!id || !title || !owner) {
       throw new Error('NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
     if (
+      typeof id !== 'string' ||
       typeof title !== 'string' ||
-      typeof body !== 'string' ||
       typeof owner !== 'string'
     ) {
       throw new Error('NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
@@ -25,4 +25,4 @@ class NewThread {
   }
 }
 
-module.exports = { NewThread };
+module.exports = { AddedThread };
