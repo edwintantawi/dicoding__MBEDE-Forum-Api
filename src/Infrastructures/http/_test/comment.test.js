@@ -1,6 +1,6 @@
 const {
-  AuthenticationsTableTestHelper,
-} = require('../../../../tests/AuthenticationsTableTestHelper');
+  CommentsTableTestHelper,
+} = require('../../../../tests/CommentsTableTestHelper');
 const {
   ThreadsTableTestHelper,
 } = require('../../../../tests/ThreadsTableTestHelper');
@@ -9,19 +9,21 @@ const { container } = require('../../container');
 const { pool } = require('../../database/postgres/pool');
 const { createServer } = require('../createServer');
 
-describe('/threads endpoint', () => {
+describe('/comments endpoint', () => {
+  afterEach(async () => {
+    await CommentsTableTestHelper.cleanTabel();
+    await ThreadsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
+  });
+
   afterAll(async () => {
     await pool.end();
   });
 
-  afterEach(async () => {
-    await UsersTableTestHelper.cleanTable();
-    await ThreadsTableTestHelper.cleanTable();
-    await AuthenticationsTableTestHelper.cleanTable();
-  });
+  describe('when POST /comments', () => {
+    it('should response 201 and presisted comments', async () => {
+      const server = await createServer({ container });
 
-  describe('when POST /threads', () => {
-    it('should response 201 and persisted threads', async () => {
       const registerPayload = {
         username: 'dicoding',
         password: 'secret_password',
@@ -38,16 +40,16 @@ describe('/threads endpoint', () => {
         body: 'thread body',
       };
 
-      const server = await createServer({ container });
+      const commentPayload = {
+        content: 'thread comment',
+      };
 
-      // register user
       await server.inject({
         method: 'POST',
         url: '/users',
         payload: registerPayload,
       });
 
-      // login user
       const loginResponse = await server.inject({
         method: 'POST',
         url: '/authentications',
@@ -58,20 +60,31 @@ describe('/threads endpoint', () => {
         data: { accessToken },
       } = JSON.parse(loginResponse.payload);
 
-      // post thread
-      const response = await server.inject({
+      const postThreadResponse = await server.inject({
         method: 'POST',
         url: '/threads',
         payload: threadPayload,
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
-      const responseJson = JSON.parse(response.payload);
-      const result = await ThreadsTableTestHelper.findThreadById(
-        responseJson.data.addedThread.id
-      );
+      const {
+        data: { addedThread },
+      } = JSON.parse(postThreadResponse.payload);
 
-      expect(response.statusCode).toEqual(201);
+      const postCommentResponse = await server.inject({
+        method: 'POST',
+        url: `/threads/${addedThread.id}/comments`,
+        payload: commentPayload,
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      const {
+        data: { addedComment },
+      } = JSON.parse(postCommentResponse.payload);
+
+      const result = await CommentsTableTestHelper.findCommentById(addedComment.id);
+
+      expect(postCommentResponse.statusCode).toEqual(201);
       expect(result).toHaveLength(1);
     });
   });

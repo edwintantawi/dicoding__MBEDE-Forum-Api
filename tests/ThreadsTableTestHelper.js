@@ -17,7 +17,7 @@ class ThreadsTableTestHelper {
     };
 
     const { rows } = await pool.query(query);
-    return rows[0];
+    return rows[0].id;
   }
 
   static async findThreadById(id) {
@@ -33,7 +33,8 @@ class ThreadsTableTestHelper {
   }
 
   static async cleanTable() {
-    await pool.query('TRUNCATE TABLE threads');
+    await pool.query(`DELETE FROM threads
+                      WHERE 1=1`);
   }
 }
 

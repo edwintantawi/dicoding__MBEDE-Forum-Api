@@ -30,12 +30,6 @@ describe('AddThreadUseCase', () => {
     const addedThread = await addThreadUseCase.execute(useCasePayload);
 
     expect(addedThread).toStrictEqual(expectedAddedThread);
-    expect(mockRepository.addThread).toBeCalledWith(
-      new NewThread({
-        title: useCasePayload.title,
-        body: useCasePayload.body,
-        owner: useCasePayload.owner,
-      })
-    );
+    expect(mockRepository.addThread).toBeCalledWith(new NewThread(useCasePayload));
   });
 });

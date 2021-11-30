@@ -8,6 +8,7 @@ const {
 
 const { extensionsPlugin } = require('../../Interfaces/http/extensions');
 const { threadsPlugin } = require('../../Interfaces/http/api/threads');
+const { commentsPlugin } = require('../../Interfaces/http/api/comments');
 
 const createServer = async ({ container }) => {
   const server = Hapi.server({
@@ -41,6 +42,10 @@ const createServer = async ({ container }) => {
     },
     {
       plugin: threadsPlugin,
+      options: { container },
+    },
+    {
+      plugin: commentsPlugin,
       options: { container },
     },
   ]);
