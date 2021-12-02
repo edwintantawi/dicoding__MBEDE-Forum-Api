@@ -22,6 +22,10 @@ exports.up = (pgm) => {
       type: 'TEXT',
       notNull: true,
     },
+    is_delete: {
+      type: 'BOOLEAN',
+      default: false,
+    },
   });
 
   pgm.createConstraint(
