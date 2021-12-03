@@ -2,6 +2,9 @@ const {
   AuthenticationsTableTestHelper,
 } = require('../../../../tests/AuthenticationsTableTestHelper');
 const {
+  CommentsTableTestHelper,
+} = require('../../../../tests/CommentsTableTestHelper');
+const {
   ThreadsTableTestHelper,
 } = require('../../../../tests/ThreadsTableTestHelper');
 const { UsersTableTestHelper } = require('../../../../tests/UsersTableTestHelper');
@@ -15,6 +18,7 @@ describe('/threads endpoint', () => {
   });
 
   afterEach(async () => {
+    await CommentsTableTestHelper.cleanTabel();
     await UsersTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await AuthenticationsTableTestHelper.cleanTable();
@@ -22,6 +26,8 @@ describe('/threads endpoint', () => {
 
   describe('when POST /threads', () => {
     it('should response 201 and persisted threads', async () => {
+      const server = await createServer({ container });
+
       const registerPayload = {
         username: 'dicoding',
         password: 'secret_password',
@@ -37,8 +43,6 @@ describe('/threads endpoint', () => {
         title: 'thread title',
         body: 'thread body',
       };
-
-      const server = await createServer({ container });
 
       // register user
       await server.inject({
@@ -73,6 +77,55 @@ describe('/threads endpoint', () => {
 
       expect(response.statusCode).toEqual(201);
       expect(result).toHaveLength(1);
+    });
+  });
+
+  describe('when GET /threads/{threadId}', () => {
+    it('should response 200 and return thread detail correctly', async () => {
+      const server = await createServer({ container });
+      const threadOwnerId = await UsersTableTestHelper.addUser({
+        id: 'user-001',
+        username: 'dicoding',
+      });
+      const threadCommenterId1 = await UsersTableTestHelper.addUser({
+        id: 'user-002',
+        username: 'mark',
+      });
+      const threadCommenterId2 = await UsersTableTestHelper.addUser({
+        id: 'user-003',
+        username: 'jeff',
+      });
+
+      const threadId = await ThreadsTableTestHelper.addThread({
+        id: 'thread-001',
+        owner: threadOwnerId,
+      });
+
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-001',
+        owner: threadCommenterId1,
+        threadId,
+        content: 'amazing!!!',
+      });
+
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-002',
+        owner: threadCommenterId2,
+        threadId,
+        content: 'good thread ever!',
+      });
+
+      const getThreadResponse = await server.inject({
+        method: 'GET',
+        url: `/threads/${threadId}`,
+      });
+
+      const responseJson = JSON.parse(getThreadResponse.payload);
+
+      expect(getThreadResponse.statusCode).toEqual(200);
+      expect(responseJson.data.thread.id).toEqual(threadId);
+      expect(responseJson.data.thread.username).toEqual('dicoding');
+      expect(responseJson.data.thread.comments).toHaveLength(2);
     });
   });
 });

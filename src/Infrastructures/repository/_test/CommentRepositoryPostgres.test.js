@@ -159,4 +159,69 @@ describe('CommentRepositoryPostgres', () => {
       expect(deletedComment[0].is_delete).toBeTruthy();
     });
   });
+
+  describe('getCommentsById method', () => {
+    it('should return comments correctly', async () => {
+      const ownerId = await UsersTableTestHelper.addUser({
+        username: 'dicoding',
+      });
+
+      const threadId1 = await ThreadsTableTestHelper.addThread({
+        id: 'thread-001',
+        owner: ownerId,
+      });
+
+      const threadId2 = await ThreadsTableTestHelper.addThread({
+        id: 'thread-002',
+        owner: ownerId,
+      });
+
+      const commenterId1 = await UsersTableTestHelper.addUser({
+        id: 'user-001',
+        username: 'jack',
+      });
+
+      const commenterId2 = await UsersTableTestHelper.addUser({
+        id: 'user-002',
+        username: 'mosh',
+      });
+
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-001',
+        threadId: threadId1,
+        owner: commenterId1,
+        content: 'jack thread comment content',
+      });
+
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-002',
+        threadId: threadId1,
+        owner: commenterId2,
+        content: 'so amazing thread!!',
+      });
+
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-003',
+        threadId: threadId2,
+        owner: commenterId2,
+      });
+
+      await CommentsTableTestHelper.deleteCommentById('comment-002');
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      const results = await commentRepositoryPostgres.getCommentsByThreadId(
+        threadId1
+      );
+
+      expect(results).toHaveLength(2);
+      expect(results[0].id).toEqual('comment-001');
+      expect(results[0].username).toEqual('jack');
+      expect(results[0].content).toEqual('jack thread comment content');
+
+      expect(results[1].id).toEqual('comment-002');
+      expect(results[1].username).toEqual('mosh');
+      expect(results[1].content).toEqual('**komentar telah dihapus**');
+    });
+  });
 });

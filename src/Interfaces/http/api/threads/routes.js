@@ -7,6 +7,11 @@ const threadsRoutes = (handler) => [
       auth: 'threadsapp_jwt',
     },
   },
+  {
+    method: 'GET',
+    path: '/threads/{threadId}',
+    handler: handler.getThreadByIdHandler,
+  },
 ];
 
 module.exports = { threadsRoutes };
