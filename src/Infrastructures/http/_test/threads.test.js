@@ -121,7 +121,6 @@ describe('/threads endpoint', () => {
       });
 
       const responseJson = JSON.parse(getThreadResponse.payload);
-
       expect(getThreadResponse.statusCode).toEqual(200);
       expect(responseJson.data.thread.id).toEqual(threadId);
       expect(responseJson.data.thread.username).toEqual('dicoding');

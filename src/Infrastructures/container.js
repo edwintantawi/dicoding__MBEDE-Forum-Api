@@ -47,6 +47,14 @@ const {
 const {
   GetThreadDetailUseCase,
 } = require('../Applications/use_case/GetThreadDetailUseCase');
+const { RepliesRepository } = require('../Domains/replies/RepliesRepository');
+const {
+  RepliesRepositoryPostgres,
+} = require('./repository/RepliesRepositoryPostgres');
+const { AddRepliesUseCase } = require('../Applications/use_case/AddRepliesUseCase');
+const {
+  GetCommentsUseCase,
+} = require('../Applications/use_case/GetCommentsUseCase');
 
 // creating container
 const container = createContainer();
@@ -77,6 +85,13 @@ container.register([
   {
     key: CommentRepository.name,
     Class: CommentRepositoryPostgres,
+    parameter: {
+      dependencies: [{ concrete: pool }, { concrete: nanoid }],
+    },
+  },
+  {
+    key: RepliesRepository.name,
+    Class: RepliesRepositoryPostgres,
     parameter: {
       dependencies: [{ concrete: pool }, { concrete: nanoid }],
     },
@@ -202,9 +217,28 @@ container.register([
     Class: GetThreadDetailUseCase,
     parameter: {
       injectType: 'destructuring',
+      dependencies: [{ name: 'threadRepository', internal: ThreadRepository.name }],
+    },
+  },
+  {
+    key: AddRepliesUseCase.name,
+    Class: AddRepliesUseCase,
+    parameter: {
+      injectType: 'destructuring',
       dependencies: [
-        { name: 'threadRepository', internal: ThreadRepository.name },
         { name: 'commentRepository', internal: CommentRepository.name },
+        { name: 'repliesRepository', internal: RepliesRepository.name },
+      ],
+    },
+  },
+  {
+    key: GetCommentsUseCase.name,
+    Class: GetCommentsUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        { name: 'commentRepository', internal: CommentRepository.name },
+        { name: 'repliesRepository', internal: RepliesRepository.name },
       ],
     },
   },

@@ -1,5 +1,9 @@
 /* istanbul ignore file */
+const jwt = require('@hapi/jwt');
 const { pool } = require('../src/Infrastructures/database/postgres/pool');
+const {
+  JwtTokenManager,
+} = require('../src/Infrastructures/security/JwtTokenManager');
 
 const AuthenticationsTableTestHelper = {
   async addToken(token) {
@@ -24,6 +28,13 @@ const AuthenticationsTableTestHelper = {
 
     return result.rows;
   },
+
+  async createToken({ id = 'user-123' }) {
+    const jwtTokenManager = new JwtTokenManager(jwt.token);
+    const accessToken = await jwtTokenManager.createAccessToken({ id });
+    return accessToken;
+  },
+
   async cleanTable() {
     await pool.query(`DELETE FROM authentications
                       WHERE 1=1`);

@@ -24,36 +24,23 @@ describe('/comments endpoint', () => {
     it('should response 201 and presisted comments', async () => {
       const server = await createServer({ container });
 
-      const registerPayload = {
-        username: 'dicoding',
-        password: 'secret_password',
-        fullname: 'Dicoding Indonesia',
-      };
-
-      const loginPayload = {
-        username: 'dicoding',
-        password: 'secret_password',
-      };
-
-      const threadPayload = {
-        title: 'thread title',
-        body: 'thread body',
-      };
-
-      const commentPayload = {
-        content: 'thread comment',
-      };
-
       await server.inject({
         method: 'POST',
         url: '/users',
-        payload: registerPayload,
+        payload: {
+          username: 'dicoding',
+          password: 'secret_password',
+          fullname: 'Dicoding Indonesia',
+        },
       });
 
       const loginResponse = await server.inject({
         method: 'POST',
         url: '/authentications',
-        payload: loginPayload,
+        payload: {
+          username: 'dicoding',
+          password: 'secret_password',
+        },
       });
 
       const {
@@ -63,8 +50,11 @@ describe('/comments endpoint', () => {
       const postThreadResponse = await server.inject({
         method: 'POST',
         url: '/threads',
-        payload: threadPayload,
         headers: { Authorization: `Bearer ${accessToken}` },
+        payload: {
+          title: 'thread title',
+          body: 'thread body',
+        },
       });
 
       const {
@@ -74,7 +64,9 @@ describe('/comments endpoint', () => {
       const postCommentResponse = await server.inject({
         method: 'POST',
         url: `/threads/${addedThread.id}/comments`,
-        payload: commentPayload,
+        payload: {
+          content: 'thread comment',
+        },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
@@ -93,36 +85,23 @@ describe('/comments endpoint', () => {
     it('should response 200 and delete comment', async () => {
       const server = await createServer({ container });
 
-      const registerPayload = {
-        username: 'dicoding',
-        password: 'secret_password',
-        fullname: 'Dicoding Indonesia',
-      };
-
-      const loginPayload = {
-        username: 'dicoding',
-        password: 'secret_password',
-      };
-
-      const threadPayload = {
-        title: 'thread title',
-        body: 'thread body',
-      };
-
-      const commentPayload = {
-        content: 'thread comment',
-      };
-
       await server.inject({
         method: 'POST',
         url: '/users',
-        payload: registerPayload,
+        payload: {
+          username: 'dicoding',
+          password: 'secret_password',
+          fullname: 'Dicoding Indonesia',
+        },
       });
 
       const loginResponse = await server.inject({
         method: 'POST',
         url: '/authentications',
-        payload: loginPayload,
+        payload: {
+          username: 'dicoding',
+          password: 'secret_password',
+        },
       });
 
       const {
@@ -132,7 +111,10 @@ describe('/comments endpoint', () => {
       const postThreadResponse = await server.inject({
         method: 'POST',
         url: '/threads',
-        payload: threadPayload,
+        payload: {
+          title: 'thread title',
+          body: 'thread body',
+        },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
@@ -143,7 +125,9 @@ describe('/comments endpoint', () => {
       const postCommentResponse = await server.inject({
         method: 'POST',
         url: `/threads/${addedThread.id}/comments`,
-        payload: commentPayload,
+        payload: {
+          content: 'thread comment',
+        },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 

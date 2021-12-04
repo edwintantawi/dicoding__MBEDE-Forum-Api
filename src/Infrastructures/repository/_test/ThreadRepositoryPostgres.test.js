@@ -64,12 +64,12 @@ describe('ThreadRepositoryPostgres', () => {
     });
   });
 
-  describe('verifyAvailableThread', () => {
+  describe('verifyAvailableThreadById', () => {
     it('should throw not found error when thread not found', async () => {
       const threadRepositoryPostgress = new ThreadRepositoryPostgres(pool, {});
 
       await expect(
-        threadRepositoryPostgress.verifyAvailableThread('thread-000')
+        threadRepositoryPostgress.verifyAvailableThreadById('thread-000')
       ).rejects.toThrow(NotFoundError);
     });
 
@@ -79,7 +79,7 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgress = new ThreadRepositoryPostgres(pool, {});
 
       await expect(
-        threadRepositoryPostgress.verifyAvailableThread(threadId)
+        threadRepositoryPostgress.verifyAvailableThreadById(threadId)
       ).resolves.not.toThrow(NotFoundError);
     });
   });
