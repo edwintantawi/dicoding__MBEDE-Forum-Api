@@ -8,11 +8,10 @@ class AddRepliesUseCase {
 
   async execute(useCasePayload) {
     const newReplies = new NewReplies(useCasePayload);
-    await this._commentRepository.checkCommentAccess({
-      commentId: newReplies.commentId,
-      threadId: newReplies.threadId,
-      credentialId: newReplies.owner,
-    });
+    await this._commentRepository.checkComment(
+      newReplies.commentId,
+      newReplies.threadId
+    );
     const addedReplies = await this._repliesRepository.addReplies(newReplies);
 
     return addedReplies;
