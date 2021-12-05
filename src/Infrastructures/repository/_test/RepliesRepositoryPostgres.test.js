@@ -8,6 +8,10 @@ const {
   ThreadsTableTestHelper,
 } = require('../../../../tests/ThreadsTableTestHelper');
 const { UsersTableTestHelper } = require('../../../../tests/UsersTableTestHelper');
+const {
+  AuthorizationError,
+} = require('../../../Commons/exceptions/AuthorizationError');
+const { NotFoundError } = require('../../../Commons/exceptions/NotFoundError');
 const { AddedReply } = require('../../../Domains/replies/entities/AddedReply');
 const { NewReplies } = require('../../../Domains/replies/entities/NewReplies');
 const { pool } = require('../../database/postgres/pool');
@@ -89,6 +93,139 @@ describe('RepliesRepositoryPostgres', () => {
       expect(replies).toHaveLength(1);
       expect(replies[0].id).toEqual(addedRepliesId);
       expect(replies[0].username).toEqual('jack');
+    });
+  });
+
+  describe('checkReplies method', () => {
+    it('should throw error when replies not found', async () => {
+      const ownerId = await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      const replyUserId = await UsersTableTestHelper.addUser({
+        id: 'user-321',
+        username: 'jack',
+      });
+
+      const threadId = await ThreadsTableTestHelper.addThread({ owner: ownerId });
+      const commentId = await CommentsTableTestHelper.addComment({
+        owner: ownerId,
+        threadId,
+      });
+
+      await RepliesTableTestHelper.addReplies({
+        commentId,
+        owner: replyUserId,
+      });
+
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {});
+
+      await expect(
+        repliesRepositoryPostgres.checkReplies('reply-000', commentId)
+      ).rejects.toThrow(NotFoundError);
+    });
+
+    it('should not throw error when replies exist', async () => {
+      const ownerId = await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      const replyUserId = await UsersTableTestHelper.addUser({
+        id: 'user-321',
+        username: 'jack',
+      });
+
+      const threadId = await ThreadsTableTestHelper.addThread({ owner: ownerId });
+      const commentId = await CommentsTableTestHelper.addComment({
+        owner: ownerId,
+        threadId,
+      });
+
+      const replyId = await RepliesTableTestHelper.addReplies({
+        commentId,
+        owner: replyUserId,
+      });
+
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {});
+
+      await expect(
+        repliesRepositoryPostgres.checkReplies(replyId, commentId)
+      ).resolves.not.toThrow(NotFoundError);
+    });
+  });
+
+  describe('checkRepliesAccess method', () => {
+    it('should throw authorization error when cannot access resourse', async () => {
+      const ownerId = await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      const replyUserId = await UsersTableTestHelper.addUser({
+        id: 'user-321',
+        username: 'jack',
+      });
+
+      const threadId = await ThreadsTableTestHelper.addThread({ owner: ownerId });
+      const commentId = await CommentsTableTestHelper.addComment({
+        owner: ownerId,
+        threadId,
+      });
+
+      const replyId = await RepliesTableTestHelper.addReplies({
+        commentId,
+        owner: replyUserId,
+      });
+
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {});
+
+      await expect(
+        repliesRepositoryPostgres.checkRepliesAccess(replyId, 'user-000')
+      ).rejects.toThrow(AuthorizationError);
+    });
+
+    it('should not throw authorization error when cam access resourse', async () => {
+      const ownerId = await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      const replyUserId = await UsersTableTestHelper.addUser({
+        id: 'user-321',
+        username: 'jack',
+      });
+
+      const threadId = await ThreadsTableTestHelper.addThread({ owner: ownerId });
+      const commentId = await CommentsTableTestHelper.addComment({
+        owner: ownerId,
+        threadId,
+      });
+
+      const replyId = await RepliesTableTestHelper.addReplies({
+        commentId,
+        owner: replyUserId,
+      });
+
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {});
+
+      await expect(
+        repliesRepositoryPostgres.checkRepliesAccess(replyId, replyUserId)
+      ).resolves.not.toThrow(AuthorizationError);
+    });
+  });
+
+  describe('deleteRepliesById method', () => {
+    it('should deleted replies correctly', async () => {
+      const ownerId = await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      const replyUserId = await UsersTableTestHelper.addUser({
+        id: 'user-321',
+        username: 'jack',
+      });
+
+      const threadId = await ThreadsTableTestHelper.addThread({ owner: ownerId });
+      const commentId = await CommentsTableTestHelper.addComment({
+        owner: ownerId,
+        threadId,
+      });
+
+      const replyId = await RepliesTableTestHelper.addReplies({
+        commentId,
+        owner: replyUserId,
+      });
+
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {});
+
+      await repliesRepositoryPostgres.deleteRepliesById(replyId);
+
+      const replies = await RepliesTableTestHelper.findRepliesById(replyId);
+
+      expect(replies[0].is_delete).toBeTruthy();
     });
   });
 });

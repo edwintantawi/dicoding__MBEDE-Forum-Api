@@ -12,14 +12,14 @@ class GetCommentsUseCase {
 
     for (let i = 0; i < comments.length; i += 1) {
       const replies = await this._repliesRepository.getRepliesByCommentId(
-        comments[0].id
+        comments[i].id
       );
       commentsWithReplies.push({
-        ...comments[0],
+        ...comments[i],
         replies,
       });
     }
-    console.log(commentsWithReplies);
+
     return commentsWithReplies;
   }
 }

@@ -5,6 +5,9 @@ const {
   CommentsTableTestHelper,
 } = require('../../../../tests/CommentsTableTestHelper');
 const {
+  RepliesTableTestHelper,
+} = require('../../../../tests/RepliesTableTestHelper');
+const {
   ThreadsTableTestHelper,
 } = require('../../../../tests/ThreadsTableTestHelper');
 const { UsersTableTestHelper } = require('../../../../tests/UsersTableTestHelper');
@@ -18,6 +21,7 @@ describe('/threads endpoint', () => {
   });
 
   afterEach(async () => {
+    await RepliesTableTestHelper.cleanTabel();
     await CommentsTableTestHelper.cleanTabel();
     await UsersTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
@@ -115,6 +119,20 @@ describe('/threads endpoint', () => {
         content: 'good thread ever!',
       });
 
+      await RepliesTableTestHelper.addReplies({
+        id: 'reply-001',
+        owner: threadOwnerId,
+        commentId: 'comment-001',
+        isDelete: true,
+      });
+
+      await RepliesTableTestHelper.addReplies({
+        id: 'reply-002',
+        owner: threadOwnerId,
+        commentId: 'comment-001',
+        content: 'hello!',
+      });
+
       const getThreadResponse = await server.inject({
         method: 'GET',
         url: `/threads/${threadId}`,
@@ -125,6 +143,13 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.thread.id).toEqual(threadId);
       expect(responseJson.data.thread.username).toEqual('dicoding');
       expect(responseJson.data.thread.comments).toHaveLength(2);
+      expect(responseJson.data.thread.comments[0].replies).toHaveLength(2);
+      expect(responseJson.data.thread.comments[0].replies[0].content).toEqual(
+        '**balasan telah dihapus**'
+      );
+      expect(responseJson.data.thread.comments[0].replies[1].content).toEqual(
+        'hello!'
+      );
     });
   });
 });

@@ -55,4 +55,36 @@ describe('/replies endpoint', () => {
       );
     });
   });
+
+  describe('when DELETE /threads/{threadId}/comments/{commentId}/replies/{replyId}', () => {
+    it('should response 200 and delete replies correctly', async () => {
+      const server = await createServer({ container });
+
+      const ownerId = await UsersTableTestHelper.addUser({
+        username: 'dicoding',
+      });
+      const threadId = await ThreadsTableTestHelper.addThread({
+        owner: ownerId,
+      });
+      const commentId = await CommentsTableTestHelper.addComment({
+        threadId,
+        owner: ownerId,
+      });
+      const replyId = await RepliesTableTestHelper.addReplies({
+        commentId,
+        owner: ownerId,
+      });
+      const accessToken = await AuthenticationsTableTestHelper.createToken({
+        id: ownerId,
+      });
+
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `/threads/${threadId}/comments/${commentId}/replies/${replyId}`,
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      expect(response.statusCode).toEqual(200);
+    });
+  });
 });

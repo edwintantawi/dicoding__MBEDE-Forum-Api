@@ -55,6 +55,9 @@ const { AddRepliesUseCase } = require('../Applications/use_case/AddRepliesUseCas
 const {
   GetCommentsUseCase,
 } = require('../Applications/use_case/GetCommentsUseCase');
+const {
+  DeleteRepliesUseCase,
+} = require('../Applications/use_case/DeleteRepliesUseCase');
 
 // creating container
 const container = createContainer();
@@ -234,6 +237,17 @@ container.register([
   {
     key: GetCommentsUseCase.name,
     Class: GetCommentsUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        { name: 'commentRepository', internal: CommentRepository.name },
+        { name: 'repliesRepository', internal: RepliesRepository.name },
+      ],
+    },
+  },
+  {
+    key: DeleteRepliesUseCase.name,
+    Class: DeleteRepliesUseCase,
     parameter: {
       injectType: 'destructuring',
       dependencies: [

@@ -25,7 +25,6 @@ describe('GetCommentsUseCase', () => {
       threadId: 'thread-123',
     });
 
-    console.log(comments);
     expect(comments).toHaveLength(1);
     expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith(
       'thread-123'

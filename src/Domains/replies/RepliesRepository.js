@@ -12,7 +12,11 @@ class RepliesRepository {
     throw new Error('REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
-  async verifyAvailableRepliesById(id) {
+  async checkReplies(replyId, commentId) {
+    throw new Error('REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+
+  async checkRepliesAccess(replyId, credentialId) {
     throw new Error('REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }

@@ -224,4 +224,54 @@ describe('CommentRepositoryPostgres', () => {
       expect(results[1].content).toEqual('**komentar telah dihapus**');
     });
   });
+
+  describe('checkComment method', () => {
+    it('should throw not found error when comment is not found', async () => {
+      const ownerId = await UsersTableTestHelper.addUser({
+        username: 'dicoding',
+      });
+
+      const threadId = await ThreadsTableTestHelper.addThread({
+        id: 'thread-001',
+        owner: ownerId,
+      });
+
+      const commentId = await CommentsTableTestHelper.addComment({
+        id: 'comment-001',
+        threadId,
+        owner: ownerId,
+        content: 'thread comment content',
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      await expect(
+        commentRepositoryPostgres.checkComment(commentId, 'thread-000')
+      ).rejects.toThrow(NotFoundError);
+    });
+
+    it('should not throw not found error when comment is found', async () => {
+      const ownerId = await UsersTableTestHelper.addUser({
+        username: 'dicoding',
+      });
+
+      const threadId = await ThreadsTableTestHelper.addThread({
+        id: 'thread-001',
+        owner: ownerId,
+      });
+
+      const commentId = await CommentsTableTestHelper.addComment({
+        id: 'comment-001',
+        threadId,
+        owner: ownerId,
+        content: 'thread comment content',
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      await expect(
+        commentRepositoryPostgres.checkComment(commentId, threadId)
+      ).resolves.not.toThrow(NotFoundError);
+    });
+  });
 });

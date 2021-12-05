@@ -1,3 +1,7 @@
+const {
+  AuthorizationError,
+} = require('../../Commons/exceptions/AuthorizationError');
+const { NotFoundError } = require('../../Commons/exceptions/NotFoundError');
 const { AddedReply } = require('../../Domains/replies/entities/AddedReply');
 const { RepliesRepository } = require('../../Domains/replies/RepliesRepository');
 
@@ -28,7 +32,11 @@ class RepliesRepositoryPostgres extends RepliesRepository {
 
   async getRepliesByCommentId(id) {
     const query = {
-      text: `SELECT replies.id, content, date, users.username
+      text: `SELECT replies.id, date, users.username,
+              CASE
+                WHEN is_delete = true THEN '**balasan telah dihapus**'
+                ELSE content
+              END AS content
               FROM replies
               LEFT JOIN users
               ON users.id = replies.owner
@@ -39,6 +47,49 @@ class RepliesRepositoryPostgres extends RepliesRepository {
 
     const { rows } = await this._pool.query(query);
     return rows;
+  }
+
+  async checkReplies(replyId, commentId) {
+    const query = {
+      text: `SELECT id
+              FROM replies
+              WHERE id = $1 AND
+                    comment_id = $2`,
+      values: [replyId, commentId],
+    };
+
+    const { rowCount } = await this._pool.query(query);
+
+    if (!rowCount) {
+      throw new NotFoundError('replies not found');
+    }
+  }
+
+  async checkRepliesAccess(replyId, credentialId) {
+    const query = {
+      text: `SELECT id
+              FROM replies
+              WHERE id = $1 AND
+                    owner = $2`,
+      values: [replyId, credentialId],
+    };
+
+    const { rowCount } = await this._pool.query(query);
+
+    if (!rowCount) {
+      throw new AuthorizationError('not have access to this resourses');
+    }
+  }
+
+  async deleteRepliesById(replyId) {
+    const query = {
+      text: `UPDATE replies
+              SET is_delete = true
+              WHERE id = $1`,
+      values: [replyId],
+    };
+
+    await this._pool.query(query);
   }
 }
 

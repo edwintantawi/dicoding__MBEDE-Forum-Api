@@ -16,8 +16,12 @@ describe('RepliesRepository interface', () => {
       'REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
     );
 
-    await expect(
-      repliesRepository.verifyAvailableRepliesById('')
-    ).rejects.toThrowError('REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(repliesRepository.checkReplies('', '')).rejects.toThrowError(
+      'REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
+
+    await expect(repliesRepository.checkRepliesAccess('', '')).rejects.toThrowError(
+      'REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
   });
 });
