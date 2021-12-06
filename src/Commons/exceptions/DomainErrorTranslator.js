@@ -53,6 +53,12 @@ DomainErrorTranslator._directories = {
   'NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
     "can't create a new comment because the data type doesn't match"
   ),
+  'NEW_REPLIES.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
+    "can't create a new replies because the required property doesn't exist"
+  ),
+  'NEW_REPLIES.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
+    "can't create a new replies because the data type doesn't match"
+  ),
 };
 
 module.exports = { DomainErrorTranslator };

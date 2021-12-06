@@ -24,7 +24,7 @@ describe('AddRepliesUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockRepliesRepository = new RepliesRepository();
 
-    mockCommentRepository.checkCommentAccess = jest
+    mockCommentRepository.checkComment = jest
       .fn()
       .mockImplementation(() => Promise.resolve());
 
@@ -40,11 +40,10 @@ describe('AddRepliesUseCase', () => {
     const addedReplies = await addRepliesUseCase.execute(useCasePayload);
 
     expect(addedReplies).toStrictEqual(expectedAddedReplies);
-    expect(mockCommentRepository.checkCommentAccess).toBeCalledWith({
-      commentId: useCasePayload.commentId,
-      threadId: useCasePayload.threadId,
-      credentialId: useCasePayload.owner,
-    });
+    expect(mockCommentRepository.checkComment).toBeCalledWith(
+      useCasePayload.commentId,
+      useCasePayload.threadId
+    );
     expect(mockRepliesRepository.addReplies).toBeCalledWith(useCasePayload);
   });
 });
