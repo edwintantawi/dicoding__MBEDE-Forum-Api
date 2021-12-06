@@ -243,7 +243,7 @@ describe('/authentications endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Refresh token not found');
+      expect(responseJson.message).toEqual('refresh token not found');
     });
   });
 
@@ -281,7 +281,7 @@ describe('/authentications endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Refresh token not found');
+      expect(responseJson.message).toEqual('refresh token not found');
     });
 
     it('should response 400 if payload not contain refresh token', async () => {
