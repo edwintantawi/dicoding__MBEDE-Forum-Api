@@ -20,6 +20,7 @@ describe('/replies endpoint', () => {
     await RepliesTableTestHelper.cleanTabel();
     await CommentsTableTestHelper.cleanTabel();
     await ThreadsTableTestHelper.cleanTable();
+    await AuthenticationsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });
 
