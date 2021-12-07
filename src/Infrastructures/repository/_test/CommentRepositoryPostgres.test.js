@@ -56,6 +56,12 @@ describe('CommentRepositoryPostgres', () => {
           owner: commentUserId,
         })
       );
+
+      const dbComments = await CommentsTableTestHelper.findCommentById(
+        addedComment.id
+      );
+
+      expect(dbComments).toHaveLength(1);
     });
   });
 

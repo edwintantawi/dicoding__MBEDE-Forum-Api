@@ -3,6 +3,7 @@ const {
 } = require('../../Commons/exceptions/AuthorizationError');
 const { NotFoundError } = require('../../Commons/exceptions/NotFoundError');
 const { AddedReply } = require('../../Domains/replies/entities/AddedReply');
+const { RepliesDetail } = require('../../Domains/replies/entities/RepliesDetail');
 const { RepliesRepository } = require('../../Domains/replies/RepliesRepository');
 
 class RepliesRepositoryPostgres extends RepliesRepository {
@@ -32,11 +33,7 @@ class RepliesRepositoryPostgres extends RepliesRepository {
 
   async getRepliesByCommentId(id) {
     const query = {
-      text: `SELECT replies.id, date, users.username,
-              CASE
-                WHEN is_delete = true THEN '**balasan telah dihapus**'
-                ELSE content
-              END AS content
+      text: `SELECT replies.id, date, users.username, content, is_delete
               FROM replies
               LEFT JOIN users
               ON users.id = replies.owner
@@ -46,7 +43,7 @@ class RepliesRepositoryPostgres extends RepliesRepository {
     };
 
     const { rows } = await this._pool.query(query);
-    return rows;
+    return rows.map((row) => new RepliesDetail({ ...row }));
   }
 
   async checkReplies(replyId, commentId) {
