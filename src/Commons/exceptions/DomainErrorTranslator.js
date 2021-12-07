@@ -17,7 +17,7 @@ DomainErrorTranslator._directories = {
     'cannot create a new user because the username character exceeds the limit'
   ),
   'REGISTER_USER.USERNAME_CONTAINS_RESTRICTED_CHAR': new InvariantError(
-    "can't create a new user because the username contains restricted characters"
+    'tidak dapat membuat user baru karena username mengandung karakter terlarang'
   ),
   'LOGIN_USER.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
     'username and password is required'

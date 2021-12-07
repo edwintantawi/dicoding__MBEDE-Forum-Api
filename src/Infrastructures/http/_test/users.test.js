@@ -117,7 +117,7 @@ describe('/users endpoint', () => {
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
       expect(responseJson.message).toEqual(
-        "can't create a new user because the username contains restricted characters"
+        'tidak dapat membuat user baru karena username mengandung karakter terlarang'
       );
     });
 
@@ -139,7 +139,7 @@ describe('/users endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('username not available');
+      expect(responseJson.message).toEqual('username tidak tersedia');
     });
   });
 });

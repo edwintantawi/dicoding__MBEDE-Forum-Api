@@ -39,7 +39,7 @@ describe('DomainErrorTranslator', () => {
       )
     ).toStrictEqual(
       new InvariantError(
-        "can't create a new user because the username contains restricted characters"
+        'tidak dapat membuat user baru karena username mengandung karakter terlarang'
       )
     );
   });
