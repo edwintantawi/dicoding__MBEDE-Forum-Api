@@ -35,8 +35,11 @@ describe('ThreadRepositoryPostgres', () => {
 
       await threadRepositoryPostgres.addThread(newThread);
 
-      const threads = await ThreadsTableTestHelper.findThreadById(`thread-123`);
+      const threads = await ThreadsTableTestHelper.findThreadById(
+        `thread-${fakeIdGenerator()}`
+      );
       expect(threads).toHaveLength(1);
+      expect(threads[0].id).toEqual(`thread-${fakeIdGenerator()}`);
     });
   });
 

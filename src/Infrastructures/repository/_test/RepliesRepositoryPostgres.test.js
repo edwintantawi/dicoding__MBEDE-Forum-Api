@@ -62,6 +62,7 @@ describe('RepliesRepositoryPostgres', () => {
       expect(addedReplies).toStrictEqual(expectedAddedReplies);
       const replies = await RepliesTableTestHelper.findRepliesById(addedReplies.id);
       expect(replies).toHaveLength(1);
+      expect(replies[0].id).toEqual(expectedAddedReplies.id);
     });
   });
 
@@ -174,7 +175,7 @@ describe('RepliesRepositoryPostgres', () => {
       ).rejects.toThrow(AuthorizationError);
     });
 
-    it('should not throw authorization error when cam access resourse', async () => {
+    it('should not throw authorization error when can access resourse', async () => {
       const ownerId = await UsersTableTestHelper.addUser({ username: 'dicoding' });
       const replyUserId = await UsersTableTestHelper.addUser({
         id: 'user-321',

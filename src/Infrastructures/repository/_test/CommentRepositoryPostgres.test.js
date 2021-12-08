@@ -80,7 +80,7 @@ describe('CommentRepositoryPostgres', () => {
       ).rejects.toThrow(NotFoundError);
     });
 
-    it('should throw 403 error when not have access', async () => {
+    it('should throw Authorization error when cannot access resourse', async () => {
       const ownerId = await UsersTableTestHelper.addUser({
         username: 'dicoding',
       });
@@ -108,7 +108,7 @@ describe('CommentRepositoryPostgres', () => {
       ).rejects.toThrow(AuthorizationError);
     });
 
-    it('should not throw error when comment is exist and have an access', async () => {
+    it('should not throw error when comment is exist and can access resourse', async () => {
       const ownerId = await UsersTableTestHelper.addUser({
         username: 'dicoding',
       });
