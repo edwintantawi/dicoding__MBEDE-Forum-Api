@@ -87,9 +87,9 @@ describe('RepliesRepositoryPostgres', () => {
 
       const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {});
 
-      const replies = await repliesRepositoryPostgres.getRepliesByCommentId(
-        commentId
-      );
+      const replies = await repliesRepositoryPostgres.getRepliesByCommentId([
+        commentId,
+      ]);
 
       expect(replies).toHaveLength(1);
       expect(replies[0].id).toEqual(addedRepliesId);

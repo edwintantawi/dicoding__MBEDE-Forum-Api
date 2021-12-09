@@ -24,7 +24,16 @@ describe('GetThreadDetailUseCase', () => {
     );
 
     mockRepliesRepository.getRepliesByCommentId = jest.fn(() =>
-      Promise.resolve([{ id: 'reply-123' }])
+      Promise.resolve([
+        {
+          id: 'reply-123',
+          username: 'dicoding',
+          date: new Date(),
+          content: 'replies content',
+          is_delete: false,
+          comment_id: 'comment-123',
+        },
+      ])
     );
 
     const getThreadDetailUseCase = new GetThreadDetailUseCase({
@@ -43,9 +52,11 @@ describe('GetThreadDetailUseCase', () => {
       useCasePayload.threadId
     );
 
-    expect(mockRepliesRepository.getRepliesByCommentId).toBeCalledWith(
-      'comment-123'
-    );
+    expect(mockRepliesRepository.getRepliesByCommentId).toBeCalledWith([
+      'comment-123',
+    ]);
+
+    console.log(thread);
 
     expect(thread.id).toEqual(useCasePayload.threadId);
     expect(thread.comments).toHaveLength(1);
