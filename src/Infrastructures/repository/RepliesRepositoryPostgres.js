@@ -31,14 +31,13 @@ class RepliesRepositoryPostgres extends RepliesRepository {
     return new AddedReply({ ...rows[0] });
   }
 
-  async getRepliesByCommentId(commentIds) {
+  async getRepliesByCommentIds(commentIds) {
     const query = {
       text: `SELECT replies.*, users.username
               FROM replies
               LEFT JOIN users
               ON users.id = replies.owner
-              WHERE comment_id = ANY($1::text[])
-              ORDER BY date ASC`,
+              WHERE comment_id = ANY($1::text[])`,
       values: [commentIds],
     };
 

@@ -66,7 +66,7 @@ describe('RepliesRepositoryPostgres', () => {
     });
   });
 
-  describe('getRepliesByCommentId method', () => {
+  describe('getRepliesByCommentIds method', () => {
     it('should return replies by comment id correctly', async () => {
       const ownerId = await UsersTableTestHelper.addUser({ username: 'dicoding' });
       const replyUserId = await UsersTableTestHelper.addUser({
@@ -87,7 +87,7 @@ describe('RepliesRepositoryPostgres', () => {
 
       const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {});
 
-      const replies = await repliesRepositoryPostgres.getRepliesByCommentId([
+      const replies = await repliesRepositoryPostgres.getRepliesByCommentIds([
         commentId,
       ]);
 

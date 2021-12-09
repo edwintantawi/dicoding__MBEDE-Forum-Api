@@ -4,7 +4,7 @@ class RepliesRepository {
     throw new Error('REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
-  async getRepliesByCommentId(id) {
+  async getRepliesByCommentIds(commentIds) {
     throw new Error('REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
