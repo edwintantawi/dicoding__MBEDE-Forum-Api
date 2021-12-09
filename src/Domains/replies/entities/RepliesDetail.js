@@ -12,11 +12,10 @@ class RepliesDetail {
 
   _handleDeletedContent(payload) {
     const { content, is_delete } = payload;
+    this.content = content;
 
     if (is_delete) {
       this.content = '**balasan telah dihapus**';
-    } else {
-      this.content = content;
     }
   }
 

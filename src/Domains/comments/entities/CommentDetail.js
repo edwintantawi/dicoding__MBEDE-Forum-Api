@@ -12,11 +12,10 @@ class CommentDetail {
 
   _handleDeletedContent(payload) {
     const { content, is_delete } = payload;
+    this.content = content;
 
     if (is_delete) {
       this.content = '**komentar telah dihapus**';
-    } else {
-      this.content = content;
     }
   }
 
