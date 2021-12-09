@@ -6,7 +6,7 @@ class ThreadsTableTestHelper {
     id = 'thread-123',
     title = 'dicoding thread',
     body = 'dicoding thread body',
-    date = '2021-08-08T07:19:09.775Z',
+    date = new Date('2021-08-08T07:19:09.775Z'),
     owner = 'user-123',
   }) {
     const query = {

@@ -17,13 +17,13 @@ class RepliesRepositoryPostgres extends RepliesRepository {
     const { commentId, owner, content } = newReplies;
 
     const id = `reply-${this._idGenerator()}`;
-    const date = new Date().toISOString();
 
     const query = {
-      text: `INSERT INTO replies
-              VALUES ($1, $2, $3, $4, $5)
+      text: `INSERT INTO
+                replies (id, owner, comment_id, content)
+              VALUES ($1, $2, $3, $4)
               RETURNING id, content, owner`,
-      values: [id, owner, commentId, date, content],
+      values: [id, owner, commentId, content],
     };
 
     const { rows } = await this._pool.query(query);

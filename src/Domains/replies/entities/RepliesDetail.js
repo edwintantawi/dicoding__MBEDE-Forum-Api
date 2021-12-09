@@ -30,7 +30,7 @@ class RepliesDetail {
     if (
       typeof id !== 'string' ||
       typeof username !== 'string' ||
-      typeof date !== 'string' ||
+      typeof date !== 'object' ||
       typeof content !== 'string' ||
       typeof is_delete !== 'boolean'
     ) {

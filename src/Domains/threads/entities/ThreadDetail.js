@@ -21,7 +21,7 @@ class ThreadDetail {
     if (
       typeof id !== 'string' ||
       typeof title !== 'string' ||
-      typeof date !== 'string' ||
+      typeof date !== 'object' ||
       typeof username !== 'string' ||
       !Array.isArray(comments)
     ) {

@@ -6,7 +6,7 @@ describe('ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'thread title',
       body: 'threadBody',
-      date: '2021-08-08T07:19:09.775Z',
+      date: new Date('2021-08-08T07:22:33.555Z'),
       comments: [],
     };
 
@@ -20,7 +20,7 @@ describe('ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'thread title',
       body: 'threadBody',
-      date: '2021-08-08T07:19:09.775Z',
+      date: new Date('2021-08-08T07:22:33.555Z'),
       username: 'dicoding',
       comments: 'comments',
     };
@@ -35,7 +35,7 @@ describe('ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'thread title',
       body: 'threadBody',
-      date: '2021-08-08T07:19:09.775Z',
+      date: new Date('2021-08-08T07:22:33.555Z'),
       username: 'dicoding',
       comments: [],
     };
