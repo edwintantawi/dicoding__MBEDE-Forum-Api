@@ -15,17 +15,17 @@ describe('GetThreadDetailUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockRepliesRepository = new RepliesRepository();
 
-    mockThreadRepository.getThreadById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve({ id: 'thread-123' }));
+    mockThreadRepository.getThreadById = jest.fn(() =>
+      Promise.resolve({ id: 'thread-123' })
+    );
 
-    mockCommentRepository.getCommentsByThreadId = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve([{ id: 'comment-123' }]));
+    mockCommentRepository.getCommentsByThreadId = jest.fn(() =>
+      Promise.resolve([{ id: 'comment-123' }])
+    );
 
-    mockRepliesRepository.getRepliesByCommentId = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve([{ id: 'reply-123' }]));
+    mockRepliesRepository.getRepliesByCommentId = jest.fn(() =>
+      Promise.resolve([{ id: 'reply-123' }])
+    );
 
     const getThreadDetailUseCase = new GetThreadDetailUseCase({
       threadRepository: mockThreadRepository,

@@ -14,13 +14,11 @@ describe('DeleteCommentUseCase', () => {
 
     const mockRepository = new CommentRepositoryPostgres(pool, {});
 
-    mockRepository.checkCommentAccess = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
+    mockRepository.checkCommentAccess = jest.fn(() => Promise.resolve());
 
-    mockRepository.deleteCommentById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(useCasePayload.id));
+    mockRepository.deleteCommentById = jest.fn(() =>
+      Promise.resolve(useCasePayload.id)
+    );
 
     const deleteCommentUseCase = new DeleteCommentUseCase({
       commentRepository: mockRepository,

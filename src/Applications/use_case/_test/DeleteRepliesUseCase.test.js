@@ -18,18 +18,10 @@ describe('DeleteRepliesUseCase', () => {
     const mockCommentRepository = new CommentRepositoryPostgres();
     const mockRepliesRepository = new RepliesRepositoryPostgres();
 
-    mockCommentRepository.checkComment = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockRepliesRepository.checkReplies = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockRepliesRepository.checkRepliesAccess = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockRepliesRepository.deleteRepliesById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
+    mockCommentRepository.checkComment = jest.fn(() => Promise.resolve());
+    mockRepliesRepository.checkReplies = jest.fn(() => Promise.resolve());
+    mockRepliesRepository.checkRepliesAccess = jest.fn(() => Promise.resolve());
+    mockRepliesRepository.deleteRepliesById = jest.fn(() => Promise.resolve());
 
     const deleteRepliesUseCase = new DeleteRepliesUseCase({
       commentRepository: mockCommentRepository,

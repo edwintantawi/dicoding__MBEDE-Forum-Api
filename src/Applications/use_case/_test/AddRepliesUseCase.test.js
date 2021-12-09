@@ -24,13 +24,11 @@ describe('AddRepliesUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockRepliesRepository = new RepliesRepository();
 
-    mockCommentRepository.checkComment = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
+    mockCommentRepository.checkComment = jest.fn(() => Promise.resolve());
 
-    mockRepliesRepository.addReplies = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(expectedAddedReplies));
+    mockRepliesRepository.addReplies = jest.fn(() =>
+      Promise.resolve(expectedAddedReplies)
+    );
 
     const addRepliesUseCase = new AddRepliesUseCase({
       commentRepository: mockCommentRepository,
