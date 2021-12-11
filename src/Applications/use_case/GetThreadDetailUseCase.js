@@ -24,13 +24,15 @@ class GetThreadDetailUseCase {
     for (const comment of comments) {
       const commentReplies = replies
         .filter((reply) => reply.comment_id === comment.id)
-        .map((reply) => new RepliesDetail({ ...reply }));
+        .map((reply) => new RepliesDetail({ ...reply }))
+        .sort((a, b) => a.date - b.date);
 
       commentsWithReplies.push({
         ...comment,
         replies: commentReplies,
       });
     }
+    console.log(commentsWithReplies[0].replies);
 
     return { ...thread, comments: commentsWithReplies };
   }
