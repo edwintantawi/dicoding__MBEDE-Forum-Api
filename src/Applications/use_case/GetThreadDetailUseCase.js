@@ -32,7 +32,6 @@ class GetThreadDetailUseCase {
         replies: commentReplies,
       });
     }
-    console.log(commentsWithReplies[0].replies);
 
     return { ...thread, comments: commentsWithReplies };
   }
