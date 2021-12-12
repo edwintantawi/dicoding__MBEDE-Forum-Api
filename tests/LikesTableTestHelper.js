@@ -31,6 +31,11 @@ const LikesTableTestHelper = {
     return rows;
   },
 
+  async getAllLikes() {
+    const { rows } = await pool.query('SELECT * FROM likes');
+    return rows;
+  },
+
   async cleanTable() {
     await pool.query(`DELETE FROM likes
                       WHERE 1=1`);
