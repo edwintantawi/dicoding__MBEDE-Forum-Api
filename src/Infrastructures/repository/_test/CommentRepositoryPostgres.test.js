@@ -235,7 +235,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comment2.id).toEqual('comment-002');
       expect(comment2.username).toEqual('mosh');
       expect(comment2.content).toEqual('**komentar telah dihapus**');
-      expect(comment2.likeCount).toEqual(2);
+      expect(comment2.likeCount).toEqual(1);
     });
   });
 
