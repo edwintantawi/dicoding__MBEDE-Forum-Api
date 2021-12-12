@@ -43,7 +43,7 @@ const CommentsTableTestHelper = {
     await pool.query(query);
   },
 
-  async cleanTabel() {
+  async cleanTable() {
     await pool.query(`DELETE FROM comments
                       WHERE 1=1`);
   },

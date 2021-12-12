@@ -12,7 +12,7 @@ const { LikeRepositoryPostgres } = require('../LikeRepositoryPostgres');
 describe('LikeRepositoryPostgres', () => {
   afterEach(async () => {
     await LikesTableTestHelper.cleanTable();
-    await CommentsTableTestHelper.cleanTabel();
+    await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });

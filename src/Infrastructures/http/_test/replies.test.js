@@ -17,8 +17,8 @@ const { createServer } = require('../createServer');
 
 describe('/replies endpoint', () => {
   afterEach(async () => {
-    await RepliesTableTestHelper.cleanTabel();
-    await CommentsTableTestHelper.cleanTabel();
+    await RepliesTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await AuthenticationsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
