@@ -31,6 +31,7 @@ jobs:
           PGDATABASE_TEST: ${{secrets.PGDATABASE_TEST}}
           PGPASSWORD_TEST: ${{secrets.PGPASSWORD_TEST}}
           PGPORT_TEST: ${{secrets.PGPORT_TEST}}
+          PGSSLMODE: ${{secrets.PGSSLMODE}}
           PGHOST: ${{ secrets.PGHOST_TEST }}
           PGUSER: ${{ secrets.PGUSER_TEST }}
           PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
