@@ -1,30 +1,28 @@
 /* istanbul ignore file */
+
 const { pool } = require('../src/Infrastructures/database/postgres/pool');
 
-const RepliesTableTestHelper = {
-  async addReplies({
-    id = 'reply-123',
-    owner,
-    commentId,
-    date = new Date(),
-    content = 'reply content',
-    isDelete = false,
+const LikesTableTestHelper = {
+  async addLike({
+    id = 'like-123',
+    commentId = 'comment-123',
+    userId = 'user-123',
   }) {
     const query = {
-      text: `INSERT INTO replies
-              VALUES ($1, $2, $3, $4, $5, $6)
+      text: `INSERT INTO likes
+              VALUES($1, $2, $3)
               RETURNING id`,
-      values: [id, owner, commentId, date, content, isDelete],
+      values: [id, commentId, userId],
     };
 
     const { rows } = await pool.query(query);
     return rows[0].id;
   },
 
-  async findRepliesById(id) {
+  async findLikeById(id) {
     const query = {
       text: `SELECT *
-              FROM replies
+              FROM likes
               WHERE id = $1`,
       values: [id],
     };
@@ -32,10 +30,16 @@ const RepliesTableTestHelper = {
     const { rows } = await pool.query(query);
     return rows;
   },
+
+  async getAllLikes() {
+    const { rows } = await pool.query('SELECT * FROM likes');
+    return rows;
+  },
+
   async cleanTable() {
-    await pool.query(`DELETE FROM replies
+    await pool.query(`DELETE FROM likes
                       WHERE 1=1`);
   },
 };
 
-module.exports = { RepliesTableTestHelper };
+module.exports = { LikesTableTestHelper };

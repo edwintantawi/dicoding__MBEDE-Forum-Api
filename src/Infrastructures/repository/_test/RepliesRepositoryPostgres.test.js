@@ -19,8 +19,8 @@ const { RepliesRepositoryPostgres } = require('../RepliesRepositoryPostgres');
 
 describe('RepliesRepositoryPostgres', () => {
   afterEach(async () => {
-    await RepliesTableTestHelper.cleanTabel();
-    await CommentsTableTestHelper.cleanTabel();
+    await RepliesTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });

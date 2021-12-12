@@ -1,6 +1,7 @@
 const {
   CommentsTableTestHelper,
 } = require('../../../../tests/CommentsTableTestHelper');
+const { LikesTableTestHelper } = require('../../../../tests/LikesTableTestHelper');
 const {
   ThreadsTableTestHelper,
 } = require('../../../../tests/ThreadsTableTestHelper');
@@ -15,7 +16,8 @@ const { CommentRepositoryPostgres } = require('../CommentRepositoryPostgres');
 
 describe('CommentRepositoryPostgres', () => {
   afterEach(async () => {
-    await CommentsTableTestHelper.cleanTabel();
+    await LikesTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });
@@ -166,7 +168,7 @@ describe('CommentRepositoryPostgres', () => {
     });
   });
 
-  describe('getCommentsById method', () => {
+  describe('getCommentsByThreadId method', () => {
     it('should return comments correctly', async () => {
       const ownerId = await UsersTableTestHelper.addUser({
         username: 'dicoding',
@@ -212,6 +214,8 @@ describe('CommentRepositoryPostgres', () => {
         owner: commenterId2,
       });
 
+      await LikesTableTestHelper.addLike({ commentId: 'comment-002' });
+
       await CommentsTableTestHelper.deleteCommentById('comment-002');
 
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
@@ -221,13 +225,17 @@ describe('CommentRepositoryPostgres', () => {
       );
 
       expect(results).toHaveLength(2);
-      expect(results[0].id).toEqual('comment-001');
-      expect(results[0].username).toEqual('jack');
-      expect(results[0].content).toEqual('jack thread comment content');
+      const [comment1, comment2] = results;
 
-      expect(results[1].id).toEqual('comment-002');
-      expect(results[1].username).toEqual('mosh');
-      expect(results[1].content).toEqual('**komentar telah dihapus**');
+      expect(comment1.id).toEqual('comment-001');
+      expect(comment1.username).toEqual('jack');
+      expect(comment1.content).toEqual('jack thread comment content');
+      expect(comment1.likeCount).toEqual(0);
+
+      expect(comment2.id).toEqual('comment-002');
+      expect(comment2.username).toEqual('mosh');
+      expect(comment2.content).toEqual('**komentar telah dihapus**');
+      expect(comment2.likeCount).toEqual(1);
     });
   });
 

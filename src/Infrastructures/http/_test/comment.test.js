@@ -11,7 +11,7 @@ const { createServer } = require('../createServer');
 
 describe('/comments endpoint', () => {
   afterEach(async () => {
-    await CommentsTableTestHelper.cleanTabel();
+    await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });
