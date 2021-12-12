@@ -21,6 +21,7 @@ describe('CommentDetail entities', () => {
       date: new Date('2021-08-08T07:22:33.555Z'),
       content: 'comment content',
       is_delete: 'true',
+      like_count: 2,
     };
 
     expect(() => new CommentDetail(payload)).toThrowError(
@@ -35,6 +36,7 @@ describe('CommentDetail entities', () => {
       date: new Date('2021-08-08T07:22:33.555Z'),
       content: 'comment content',
       is_delete: true,
+      like_count: 2,
     };
 
     const commentDetail = new CommentDetail(payload);
@@ -49,6 +51,7 @@ describe('CommentDetail entities', () => {
       date: new Date('2021-08-08T07:22:33.555Z'),
       content: 'comment content',
       is_delete: false,
+      like_count: 2,
     };
 
     const commentDetail = new CommentDetail(payload);
@@ -57,6 +60,7 @@ describe('CommentDetail entities', () => {
     expect(commentDetail.username).toEqual(payload.username);
     expect(commentDetail.date).toEqual(payload.date);
     expect(commentDetail.content).toEqual(payload.content);
+    expect(commentDetail.likeCount).toEqual(payload.like_count);
     expect(commentDetail).not.toHaveProperty('is_delete');
   });
 });
