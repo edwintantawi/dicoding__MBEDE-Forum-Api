@@ -26,6 +26,8 @@ jobs:
           npm run test
         env:
           CI: true
+          HOST: ${{secrets.HOST}}
+          PORT: ${{secrets.PORT}}
           PGHOST_TEST: ${{secrets.PGHOST_TEST}}
           PGUSER_TEST: ${{secrets.PGUSER_TEST}}
           PGDATABASE_TEST: ${{secrets.PGDATABASE_TEST}}
